@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# This program provides a user an ability to search a CSV file for a specific term
+# and provides the ID field it is on in the file for quick searching of large CSV files.
+# This is a NON-GUI version of the program. Release 1.0.
+
+# User initiates program loop.
+while true; do
+    echo "**********************************************************************"
+    read -p "Would you like to perform a Library term search, YES or NO (type one all caps)? " useranswer
+
+    if [ "$useranswer" != "YES" ]; then
+        break
+    fi
+
+    # User input capture.
+    if [ "$#" -lt 1 ]; then
+        echo "****************************************************************************"
+        echo "CSV LIBRARY FAST SEARCH TOOL"
+        echo ""
+        echo "Instructions: Please enter a record name you are looking for."
+        echo "Caveat - note that the entry processing is case-sensitive. So if, for example"
+        echo "'hotel' produces no results, then try 'Hotel' or 'HOTEL' instead."
+        read -p "Please enter a term to search the Data Library for here: " search_term
+    else
+        search_term=$1
+    fi
+
+    # Variables
+    # Open the targeted CSV file and setup csv.reader settings. Using library.csv as a test target file.
+    # Placement of target file should be within the same folder, if not then we have to create paths.
+    csvfile="c:/Users/Tom Lutzenberger/Desktop/Classes in Progress/CS 119 Python/Project/library.csv"
+    IFS=','  # Set the delimiter to comma for CSV parsing.
+
+    # Search the CSV for the input string. Note that term entry processing is CASE-SENSITIVE for accurate results.
+    while read -r line; do
+        if [[ "$line" == *"$search_term"* ]]; then
+            echo "------------------------------------------------------"
+            echo "Records found equaling search term = $line"
+            echo "------------------------------------------------------"
+        fi
+    done < "$csvfile"
+
+    echo "*************************************************************"
+    read -p "Would you like to continue, YES or NO? " usernextanswer
+    if [ "$usernextanswer" != "YES" ]; then
+        echo ""
+        echo "Thank you for using the search program. Goodbye."
+        break
+    fi
+done
+
+# End program.
